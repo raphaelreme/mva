@@ -14,3 +14,4 @@ build/
 *.fls
 *.log
 *.synctex.gz
+*.out
