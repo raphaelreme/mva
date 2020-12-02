@@ -1,0 +1,47 @@
+% -----------------------*- LaTeX-*-----------------------
+%   preamble.sty -- Make homework reports
+%
+%   Raphael Reme, 2020
+%
+% -------------------------------------------------------
+% Packages
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}  % Margins
+\usepackage{graphicx}
+\usepackage{stmaryrd}
+
+% Default location of images
+\graphicspath{ {./images/} }
+% -------------------------------------------------------
+% Useful mathematical objects
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\K}{\mathbb{K}}
+
+\newcommand{\inter}[2]{\left[#1,\, #2\right]}
+\newcommand{\intercc}[2]{\inter{#1, #2}}
+\newcommand{\interco}[2]{\left[#1,\, #2\right[}
+\newcommand{\interoc}[2]{\left]#1,\, #2\right[}
+\newcommand{\interoo}[2]{\left]#1,\, #2\right[}
+
+\newcommand{\Inter}[2]{\left\llbracket#1,\, #2\right\rrbracket}
+\newcommand{\Intercc}[2]{\Inter{#1, #2}}
+\newcommand{\Interco}[2]{\left\llbracket#1,\, #2\right\llbracket}
+\newcommand{\Interoc}[2]{\left\rrbracket#1,\, #2\right\rrbracket}
+\newcommand{\Interoo}[2]{\left\rrbracket#1,\, #2\right\llbracket}
+
+\newcommand{\set}[1]{\left\{#1\right\}}
+
+\newcommand{\norm}[1]{\left|\left| #1 \right|\right|}
+
+\renewcommand{\P}{\mathbb{P}}
+\newcommand{\E}{\mathbb{E}}
+
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\Diag}{Diag}
+\DeclareMathOperator{\Ker}{Ker}
+\DeclareMathOperator{\sign}{sign}
+\DeclareMathOperator{\Hessian}{Hess}

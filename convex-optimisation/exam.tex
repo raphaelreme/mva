@@ -1,0 +1,400 @@
+\documentclass{article}
+
+\usepackage{../preamble}
+
+\title{Convex optimization Exam}
+\author{Raphael Reme}
+\date{December 2020}
+
+\begin{document}
+\maketitle
+\section{Exercise 1}
+
+The problem $(P)$ can be expressed as an LP problem:
+
+\begin{equation*}
+    \begin{aligned}
+        (P):\;\; & \text{minimize}_x &  & \norm{x}_\infty \\
+                 & \text{subject to} &  & Ax = b          \\
+                 &                   &  &                 \\
+    \end{aligned}
+    \;
+    \begin{aligned}
+        \Leftrightarrow\;\; & \text{minimize}_{x, z} &  & z                   \\
+                            & \text{subject to}      &  & Ax = b              \\
+                            &                        &  & z = \norm{x}_\infty \\
+    \end{aligned}
+    \;
+    \begin{aligned}
+        \Leftrightarrow\;\; & \text{minimize}_{x, z} &  & z                      \\
+                            & \text{subject to}      &  & Ax = b                 \\
+                            &                        &  & z \ge |x_i|, \forall i \\
+    \end{aligned}
+    \text {(Same as in HW2, Ex 3)}
+\end{equation*}
+\vspace{10px}
+
+\begin{equation*}
+    \begin{aligned}
+        (P)\Leftrightarrow\;\; & \text{minimize}_{x, z} &  & z                        \\
+                               & \text{subject to}      &  & Ax = b                   \\
+                               &                        &  & \forall i,x_i - z \le 0, \\
+                               &                        &  & -x_i - z \le 0           \\
+    \end{aligned}
+    \;
+    \begin{aligned}
+        \Leftrightarrow\;\; & \text{minimize}_{x, z} &  & z                                \\
+                            & \text{subject to}      &  & Ax = b                           \\
+                            &                        &  & G\begin{pmatrix} x \\ z\end{pmatrix} \le 0 \\
+    \end{aligned}
+\end{equation*}
+
+With G = $\begin{pmatrix}I_n  & -1_n \\-I_n & -1_n \\\end{pmatrix}$. The lagrangian is therefore:
+
+\begin{equation*}
+    \begin{aligned}
+        \mathcal{L}(x, z, \lambda, \nu) & = z + \lambda^T G \begin{pmatrix} x \\ z\end{pmatrix} + \nu^T(Ax - b)                                      \\
+                                        & = z + \sum_{i=1}^{n} \lambda_i(x_i -z) + \sum_{i=n+1}^{2n} \lambda_i(-x_i -z) + \nu^TAx - \nu^Tb \\
+                                        & = z(1 - \lambda^T1_{2n}) + \sum_{i=1}^{n} x_i(\lambda_i - \lambda_{n+i}) +  \nu^TAx - \nu^Tb     \\
+                                        & = z(1 - \lambda^T1_{2n}) + (A^T\nu + \lambda_{1:n} - \lambda_{n+1:2n})^Tx - b^T\nu               \\
+    \end{aligned}
+\end{equation*}
+
+We can now compute the dual function: $g(\lambda, \nu) = \inf_{x, z} \mathcal{L}(x, z, \lambda, \nu)$:
+
+\begin{equation*}
+    g(\lambda, \nu) = \bigg\{
+    \begin{aligned}
+         & -b^T\nu &  & \text{if $\lambda^T1_{2n} = 1$ and $A^T\nu + \lambda_{1:n} - \lambda_{n+1:2n} = 0$} \\
+         & -\infty &  & \text{otherwise}                                                                    \\
+    \end{aligned}
+\end{equation*}
+
+
+Thus the dual problem is:
+\begin{equation*}
+    \begin{aligned}
+        (D):\;\; & \text{maximize}_{\lambda, \nu} &  & -b^T\nu                                       \\
+                 & \text{subject to}              &  & \lambda^T1_{2n} = 1                           \\
+                 &                                &  & A^T\nu + \lambda_{1:n} - \lambda_{n+1:2n} = 0 \\
+                 &                                &  & \lambda \ge 0                                 \\
+    \end{aligned}
+    \;
+    \begin{aligned}
+        \Leftrightarrow\;\; & \text{maximize}_{\lambda_1, \lambda_2, \nu} &  & -b^T\nu                             \\
+                            & \text{subject to}                           &  & \lambda_1^T1_n + \lambda_2^T1_n = 1 \\
+                            &                                             &  & A^T\nu + \lambda_1 - \lambda_2 = 0  \\
+                            &                                             &  & \lambda_1 \ge 0, \lambda_2 \ge 0    \\
+    \end{aligned}
+\end{equation*}
+
+
+\section{Exercise 2}
+Let $u, v \in \R^n_{++}$, $D_{KL}(u, v) = f(u) - f(v) - \nabla f(v)^T(u - v)$, with $f(x) = \sum_i x_i \log x_i$.
+\\
+Let's show that $u \neq v \Rightarrow D_{KL}(u, v) > 0$.
+\\
+Let's consider the function $h(x) = x \log x, \forall x \in \R^\star_+$, $h'(x) = 1 + \log x$
+and $h''(x) = \frac{1}{x} > 0$. Therefore $h$ is strictly convex.
+\\
+Now let's show that $f$ is strictly convex:
+Let $t \in \interoo{0}{1}, f(tu + (1-t)v) = \sum_i f(tu_i + (1-t)v_i) < \sum_i tf(u_i) + (1-t)f(v_i) = t f(u) + (1-t) f(v)$
+\\
+(Note: it still holds for $u = 0$ or $v = 0$ with $h(0) = 0$ and thus $f(0) = 0$)
+\\
+Therefore as $f$ is strictly convex and differentiable, $\forall u \neq v, f(u) > f(v) + \nabla f(v)^T(u -v) \Rightarrow D_{KL}(u, v) > 0$.
+\\
+\vspace{10px}
+\\
+As $D_{KL}(u, u) = f(u) - f(u) + 0 = 0$, $\forall u, v \in \R^n, D_{KL}(u, v) \ge 0$ and $D_{KL}(u, v) = 0 \Leftrightarrow u = v$.
+
+\section{Exercise 3}
+The problem $(P)$ can be simplfied using that $A = V^TV$ (and that the square root is a non decreasing function)
+
+\begin{equation*}
+    \begin{aligned}
+        (P):\;\; & \text{minimize}_x &  & c^Tx                 \\
+                 & \text{subject to} &  & x^T(A - bb^T)x \le 0 \\
+                 &                   &  & b^Tx \ge 0           \\
+                 &                   &  & Dx = g               \\
+    \end{aligned}
+    \;
+    \begin{aligned}
+        \Leftrightarrow\;\; & \text{minimize}_x &  & c^Tx                    \\
+                            & \text{subject to} &  & (Vx)^T(Vx) \le (b^Tx)^2 \\
+                            &                   &  & b^Tx \ge 0              \\
+                            &                   &  & Dx = g                  \\
+    \end{aligned}
+    \;
+    \begin{aligned}
+        \Leftrightarrow\;\; & \text{minimize}_x &  & c^Tx                 \\
+                            & \text{subject to} &  & \norm{Vx}_2 \le b^Tx \\
+                            &                   &  & Dx = g               \\
+                            &                   &  &                      \\
+    \end{aligned}
+\end{equation*}
+
+
+Therefore $(P)$ is a SOCP problem and thus a convex problem.
+
+The dual can then be retrieve by introducing new variables:
+
+\begin{equation*}
+    \begin{aligned}
+        (P)\Leftrightarrow\;\; & \text{minimize}_{x,y,t} &  & c^Tx             \\
+                               & \text{subject to}       &  & \norm{y}_2 \le t \\
+                               &                         &  & Dx = g           \\
+                               &                         &  & y = Vx           \\
+                               &                         &  & t = b^Tx         \\
+    \end{aligned}
+\end{equation*}
+
+The lagrangian is
+
+\begin{equation*}
+    \begin{aligned}
+        \mathcal{L}(x, y, t, \lambda, \nu_1, \nu_2, \nu_3) & = c^Tx + \lambda(\norm{y}_2 - t) + \nu_1^T(Dx - g) + \nu_2^T(y - Vx) + \nu_3(t - b^Tx)                 \\
+                                                           & = (c + D^T\nu_1 - V^T\nu_2 - \nu_3b)^Tx + \lambda\norm{y}_2 + \nu_2^Ty + (\nu_3 - \lambda)t - \nu_1^Tg \\                  \\
+    \end{aligned}
+\end{equation*}
+
+The dual function is
+
+\begin{equation*}
+    \begin{aligned}
+        g(\lambda, \nu_1, \nu_2, \nu_3) & = \inf_{x, y, t} \mathcal{L}(x, y, t, \lambda, \nu_1, \nu_2, \nu_3)                                                          \\
+                                        & = \inf_x (c + D^T\nu_1 - V^T\nu_2 - \nu_3b)^Tx + \inf_y(\lambda\norm{y}_2 + \nu_2^Ty) + \inf_t t(\nu_3 - \lambda) - \nu_1^Tg \\                  \\
+                                        & = \bigg\{\begin{aligned}
+             & - \nu_1^Tg &  & \text{if $\nu_3 = \lambda$ and $c + D^T\nu_1 - V^T\nu_2 - \nu_3b=0$ and $\norm{\nu_2} \le \lambda$} \\
+             & - \infty   &  & \text{otherwise}
+        \end{aligned}
+    \end{aligned}
+\end{equation*}
+
+Using the fact that $\inf_y(\lambda\norm{y}_2 + \nu_2^Ty) = \bigg\{
+    \begin{aligned}
+         & 0        &  & \text{if } \norm{\nu_2} \le \lambda \\
+         & - \infty &  & \text{otherwise}
+    \end{aligned}$ (Can be shown with Cauchy–Schwarz inequality. It has been done in previous homework)
+The dual problem is therefore:
+
+\begin{equation*}
+    \begin{aligned}
+        (D):\;\; & \text{maximize}_{\lambda, \nu_1, \nu_2, \nu_3} &  & -\nu_1^Tg                          \\
+                 & \text{subject to}                              &  & \norm{\nu_2} \le \lambda           \\
+                 &                                                &  & c + D^T\nu_1 - V^T\nu_2 - \nu_3b=0 \\
+                 &                                                &  & \nu_3 = \lambda                    \\
+                 &                                                &  & \lambda \ge 0                      \\
+    \end{aligned}
+    \;
+    \begin{aligned}
+        \Leftrightarrow\;\; & \text{maximize}_{\lambda, \nu_1, \nu_2} &  & -g^T\nu_1                             \\
+                            & \text{subject to}                       &  & \norm{\nu_2} \le \lambda              \\
+                            &                                         &  & c + D^T\nu_1 - V^T\nu_2 - \lambda b=0 \\
+                            &                                         &  &                                       \\
+                            &                                         &  &                                       \\
+    \end{aligned}
+\end{equation*}
+
+\section{Exercise 4}
+Let's compute the dual of $(P)$:
+
+\begin{equation*}
+    \begin{aligned}
+        (P):\;\; & \text{minimize}_x &  & -\sum_i \log(b_i - a_i^Tx) \\
+                 &                   &  &                            \\
+    \end{aligned}
+    \;
+    \begin{aligned}
+        \Leftrightarrow\;\; & \text{minimize}_{x, y} &  & -\sum_i \log(y_i) \\
+                            & \text{subject to}      &  & y = b - Ax        \\
+    \end{aligned}
+\end{equation*}
+
+(With $A = \begin{pmatrix}
+        a_1^T  \\
+        \vdots \\
+        a_n^T
+    \end{pmatrix}$). Which give the lagrangian:
+\begin{equation*}
+    \begin{aligned}
+        \mathcal{L}(x, y, \nu) & = -\sum_i \log(y_i) + \nu^T(y -b + Ax)             \\
+                               & = -\nu^Tb + \nu^TAx + \sum_i \nu_i y_i - \log(y_i)
+    \end{aligned}
+\end{equation*}
+\begin{equation*}
+    \begin{aligned}
+        g(\nu) & = \inf_{x,y} L(x,y,\nu)                                                 \\
+               & = -\nu^Tb + \inf_x \nu^TAx + \sum_i \inf_{y_i>0}(\nu_i y_i - \log(y_i))
+    \end{aligned}
+\end{equation*}
+
+The first infimum over $x$ is bounded if and only if $A^T\nu = 0$ (and then is equal to 0). And the infimums over $y_i$ are
+unbounded for $\nu_i \le 0$ ($\nu_i y_i - \log(y_i) \underset{y_i \rightarrow +\infty}{\longrightarrow} -\infty$) and for $\nu_i > 0$ the infimums are
+realised with $y_i = \frac{1}{\nu_i}$ (From derivative)
+
+Thus $g(\nu) = \Bigg\{\begin{aligned}
+         & -\nu^Tb + \sum_i 1 + \log(\nu_i) &  & \text{if } A^T\nu = 0 \text{ and } \nu > 0 \\
+         & -\infty                          &  & \text{otherwise}
+    \end{aligned} $
+
+
+And the dual problem is:
+\begin{equation*}
+    \begin{aligned}
+        (D):\;\; & \text{maximize}_\nu &  & -\nu^Tb + m + \sum_i \log(\nu_i) \\
+                 & \text{subject to}   &  & A^T\nu = 0                       \\
+    \end{aligned}
+\end{equation*}
+
+\section{Exercise 5}
+Let the problems $(P)$ and $(\hat{P})$:
+
+\begin{equation*}
+    \begin{aligned}
+        (P):\;\; & \text{minimize}_x &  & f_0(x) \\
+                 & \text{subject to} &  & Ax=b   \\
+    \end{aligned}
+    \;\;\;\text{and}\;\;\;
+    \begin{aligned}
+        (\hat{P}):\;\; & \text{minimize}_x &  & f_0(x) + \alpha \norm{Ax -b}_2^2 \\
+                       &                   &  &                                  \\
+    \end{aligned}
+\end{equation*}
+
+The dual function of $(P)$ is
+\begin{equation*}
+    \begin{aligned}
+        g(\nu) & = \inf_x \mathcal{L}(x, \nu)             \\
+               & = \inf_x \big(f_0(x) + \nu^T(Ax -b)\big) \\
+    \end{aligned}
+\end{equation*}
+
+
+Let's $\hat{x}$ a minimizer of $(\hat{P})$. As $f_0$ is differentiable and convex, this minimizer verify $\nabla f_0(\hat{x}) + 2\alpha A^T(A\hat{x} -b) = 0$.
+Let $\nu$, one can also see that $x$ minimizes $f_0(x) + \nu^T(Ax -b)$ if and only if $\nabla f_0(x) + A^T\nu = 0$
+
+Let's called $\hat{\nu} = 2\alpha(A\hat{x} -b)$ then a minimizer of $f_0(x) + \hat{\nu}^T(Ax -b)$ is $\hat{x}$ as
+$\nabla f_0(\hat{x}) + A^T\hat{\nu} = \nabla f_0(\hat{x}) + 2\alpha A^T(A\hat{x} -b) = 0$.
+
+Therefore $g(\hat{\nu}) = f_0(\hat{x}) + \hat{\nu}(A\hat{x} - b) = f_0(\hat{x}) + 2\alpha \norm{A\hat{x} - b}_2^2
+    \Rightarrow \hat{\nu}$ is a feasible point of the dual! And we have a lower bound for our problem:
+
+\begin{equation*}
+    \begin{aligned}
+        p = f_0(x^\star) & \ge d            \\
+                         & = g(\nu^\star)   \\
+                         & \ge g(\hat{\nu}) \\
+    \end{aligned}
+\end{equation*}
+
+Finally: $f_0(x^\star) \ge f_0(\hat{x}) + 2\alpha \norm{A\hat{x} - b}_2^2$
+
+\section{Exercise 6}
+
+Let the problem $(P)$ (The same as SVM from Homework 2)
+
+
+\begin{equation*}
+    \begin{aligned}
+        (P):\;\; & \text{minimize}_{w, z} &  & \frac{1}{2}\norm{w}_2^2 + C1_m^Tz                    \\
+                 & \text{subject to}      &  & y_i w_i^Tx_i \ge 1 - z_i, \forall i \in \Inter{1}{m} \\
+                 &                        &  & z \ge 0                                              \\
+    \end{aligned}
+\end{equation*}
+
+We can recompute the dual the same way as before: with first the lagrangian:
+
+\begin{equation*}
+    \begin{aligned}
+        \mathcal{L}(w, z, \lambda, \pi) & = \frac{1}{2}\norm{w}_2^2 + C1_m^Tz + \sum_i\lambda_i (1 - y_i w_i^T x_i - z_i) - \pi^Tz                                           \\
+                                        & = 1_m^T\lambda + (C1_m - \pi - \lambda)^Tz + \frac{1}{2} \left( \norm{w}_2^2 - 2 \left(\sum_i \lambda_i y_i x_i\right)^T w \right) \\
+    \end{aligned}
+\end{equation*}
+
+As $\inf_w \norm{w}_2^2 - 2t^Tw = -\norm{t}_2^2$ (Using derivative). Then the dual problem is:
+\begin{equation*}
+    \begin{aligned}
+        (D):\;\; & \text{maximize}_{\lambda, \pi} &  & 1_m^T\lambda - \frac{1}{2} \norm{\sum_i \lambda_i y_i x_i}_2^2 \\
+                 & \text{subject to}              &  & C1_m = \pi + \lambda                                           \\
+                 &                                &  & \lambda \ge 0, \pi \ge 0                                       \\
+    \end{aligned}
+    \;
+    \begin{aligned}
+        \Leftrightarrow\;\; & \text{maximize}_{\lambda} &  & 1_m^T\lambda - \frac{1}{2} \norm{\sum_i \lambda_i y_i x_i}_2^2 \\
+                            & \text{subject to}         &  & 0 \le \lambda \le C1_m                                         \\
+                            &                           &  &                                                                \\
+    \end{aligned}
+\end{equation*}
+
+\vspace{20px}
+
+
+$(D)$ Can be rewritten as a QP program:
+\begin{equation*}
+    \begin{aligned}
+        \norm{\sum_i \lambda_i y_i x_i}_2^2 & = \left(\sum_i \lambda_i y_i x_i\right)^T \sum_i \lambda_i y_i x_i &                                                                  \\
+                                            & = \sum_{i,j} \lambda_i y_i x_i^Tx_j y_j \lambda_j                  &                                                                  \\
+                                            & = \sum_{i,j} \lambda_i y_i (XX^T)_{i,j}\, y_j \lambda_j            & (\text{With } X = \begin{pmatrix}
+            x_1^T  \\
+            \vdots \\
+            x_m^T  \\
+        \end{pmatrix} \in \R^{m\times n}) \\
+                                            & = \lambda^T \Diag(y) XX^T \Diag(y) \lambda
+    \end{aligned}
+\end{equation*}
+
+And then
+\begin{equation*}
+    \begin{aligned}
+        (D)\Leftrightarrow\;\; & \text{minimize}_{\lambda} &  & \frac{1}{2}\lambda^T \Diag(y) XX^T \Diag(y) \lambda - 1_m^T\lambda \\
+                               & \text{subject to}         &  & 0 \le \lambda \le C1_m                                             \\
+    \end{aligned}
+    \;
+    \begin{aligned}
+        \Leftrightarrow\;\; & \text{minimize}_{\lambda} &  & \lambda^T Q \lambda + p^T\lambda \\
+                            & \text{subject to}         &  & A\lambda \le b                   \\
+    \end{aligned}
+\end{equation*}
+
+With $Q = \frac{1}{2}\Diag(y) XX^T \Diag(y)$, $p = - 1_m$, $A = \begin{pmatrix}
+        I_m  \\
+        -I_m \\
+    \end{pmatrix}$ and $ b = \begin{pmatrix}
+        C1_m \\
+        0_m  \\
+    \end{pmatrix}$. Note that $Q \ge 0$: indeed by construction of $Q$ we have $\forall z, z^TQz = \norm{\sum_i z_i y_i x_i}_2^2 \ge 0$
+
+\vspace{30px}
+
+We can now use the barrier method to solve the dual! (See the code) As the primal is strictly feasible and convex, strong duality holds
+(Slater's condition) and therefore the KKT conditions holds.
+
+Let's call $w^\star, z^\star, \lambda^\star, \pi^\star$ the solution of the primal/dual:
+
+\begin{equation*}
+    \begin{aligned}
+         & \text{Primal feasibility:}      &  & z^\star \ge 0 \text{ and } y_i w_i^{\star T} x_i \ge 1 - z^\star_i, \forall i \in \Inter{1}{m}                                             \\
+         & \text{Dual feasibility:}        &  & \lambda^\star \ge 0, \pi^\star \ge 0 \text{ and } C1_m = \pi^\star + \lambda^\star                                                         \\
+         & \text{Complementary slackness:} &  & \forall i \in \Inter{1}{m} \pi^\star_i z^\star_i = 0, \lambda^\star_i(1 - z^\star_i - y_i w_i^{\star T} x_i) = 0                           \\
+         & \text{First order conditions:}  &  & \nabla_w \mathcal{L}(w^\star, z^\star, \lambda^\star, \pi^\star) = 0, \nabla_z \mathcal{L}(w^\star, z^\star, \lambda^\star, \pi^\star) = 0 \\
+    \end{aligned}
+\end{equation*}
+
+We can retrieve $w^\star, z^\star$ ($\pi^\star$) from $\lambda^\star$ (obtained with the barrier method):
+
+\begin{equation*}
+    \begin{aligned}
+         & w^\star = \sum_i \lambda^\star_i y_i x_i = X^T \Diag(y) \lambda^\star & \text{(first order condition on $w$)} \\
+         & \pi^\star = C1_m - \lambda^\star                                      & \text{(Dual feasibility)}             \\
+         & z_i^\star = \bigg\{\begin{aligned}
+             & 0                       &  & \text{if } \pi_i^\star \ne 0 \Leftrightarrow \lambda^\star < C \\
+             & 1 - y_i w^{\star T} x_i &  & \text{if } \lambda_i^\star > 0                                 \\
+        \end{aligned}                         & \text{(Complementary slackness)}      \\
+    \end{aligned}
+\end{equation*}
+
+
+Please see the provided notebook to see the code.
+
+\end{document}
