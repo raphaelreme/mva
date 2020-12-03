@@ -7,13 +7,23 @@
 % Packages
 \usepackage{amsfonts}
 \usepackage{amsmath}
+\usepackage{dsfont}
 \usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}  % Margins
 \usepackage{graphicx}
+\usepackage{listings}
+\usepackage{multirow}
 \usepackage{stmaryrd}
+\usepackage{subcaption}
 
 % Default location of images
 \graphicspath{ {./images/} }
-% -------------------------------------------------------
+
+% Add bigger bracket/parenthesis
+\makeatletter
+\newcommand{\vast}{\bBigg@{4}}
+\newcommand{\Vast}{\bBigg@{5}}
+\makeatother
+
 % Useful mathematical objects
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\N}{\mathbb{N}}
