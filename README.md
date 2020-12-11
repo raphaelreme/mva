@@ -2,7 +2,7 @@
 
 ## Python environments and jupyter kernels
 
-I'm using `pyenv` and `virtualenvwrapper` to generate different environments for the courses. Even if it's not required, some notebooks will refer to a specific kernel which is unknown on your machine. In that case you can just change the kernel to one of yours.
+I'm using `virtualenv` and `virtualenvwrapper` to generate different environments for the courses. Even if it's not required, some notebooks will refer to a specific kernel which is unknown on your machine. In that case you can just change the kernel to one of yours.
 
 
 Some useful bash commands:
