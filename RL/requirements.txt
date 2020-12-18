@@ -1,2 +1,5 @@
 gym
 matplotlib
+numpy
+opencv-python
+torch
