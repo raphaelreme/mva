@@ -1,0 +1,231 @@
+\documentclass[12 pt]{article}
+
+%%%%PACKAGE%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage[sfmath]{kpfonts}
+\usepackage[latin1]{inputenc} 
+\usepackage[T1]{fontenc}      
+%\usepackage[english,french]{babel}  
+\usepackage[english]{babel} 
+\usepackage{amsmath}
+%\usepackage{mathtools}
+\usepackage{graphicx} %pour include graphics
+\graphicspath{{images/}}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{layout}
+\usepackage{vmargin}
+\usepackage{ifthen}
+\usepackage[svgnames,dvipsnames]{xcolor}
+\graphicspath{{images}}
+\usepackage[justification=centering]{caption}
+\usepackage{tikz}
+\usepackage[linkbordercolor=white]{hyperref}
+\usetikzlibrary{fadings}
+\usepackage[notmath]{sansmathfonts} %Sans serif pour majuscules textsc
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{svg}
+\usepackage{pgfgantt}
+\usepackage{titlesec} %espace entre titre et text
+
+
+
+\usepackage{wasysym} %smiley
+
+
+
+%\renewcommand{\FrenchLabelItem}{-}
+\renewcommand{\subitem}{\newline \quad \textbullet~~  }
+\renewcommand{\arraystretch}{1.3}
+
+%%Pour réinitialiser les numéros footnote
+\usepackage{perpage} %the perpage package
+\MakePerPage{footnote} %the perpage package command
+%\usepackage{UPSTI_Pedagogique}\label{key}
+
+\makeatletter
+\renewcommand{\thesection}{\@arabic\c@section}
+\makeatother
+
+
+\makeatletter 
+\newcommand\mynobreakpar{\par\nobreak\@afterheading} 
+\makeatother
+
+
+
+\definecolor{HCBleu}{RGB}{26,39,132}
+\definecolor{HCBleuclair}{RGB}{148,50,99}
+
+\definecolor{ITEC}{RGB}{218,127,122}
+\definecolor{EE}{RGB}{120,229,135}
+%\definecolor{SIN}{RGB}{193,214,235}
+\definecolor{SIN}{RGB}{162,196,232}
+\setlength{\parindent}{1cm} %alinéa
+
+
+\renewcommand\thefootnote{\textbf{\textcolor{HCBleuclair}{\arabic{footnote}}}}
+
+%%%% debut macro couleur légende %%%% 
+\makeatletter 
+\renewcommand{\fnum@figure}{\textcolor{HCBleuclair}{\normalsize\textbf{\figurename\,\thefigure}}} 
+
+\renewcommand{\fnum@table}{\textcolor{HCBleuclair}{\textsc{\textbf{Tableau\,\thetable}}}}
+
+\makeatother 
+
+
+%%%% fin macro couleur légende %%%%
+
+
+\newcommand{\gradient}[1]{\noindent%
+	\begin{tikzpicture}
+	\fill[left color=HCBleu,right color=HCBleuclair] rectangle (\linewidth,0.16cm);
+	\node at (0.5\linewidth,0.05) {\bfseries #1};
+	%\fill[cyan,path fading=west] (0,-1em) rectangle (\linewidth,-1.5em);
+	\end{tikzpicture}%
+}
+
+\newcommand{\ligneg}[1]{\noindent%
+	\begin{tikzpicture}
+	
+	\fill[left color=HCBleu,right color=HCBleuclair] rectangle (\linewidth,0.07cm);
+	\node at (.5\linewidth,0.05) {\bfseries #1};
+	%\fill[cyan,path fading=west] (0,-1em) rectangle (\linewidth,-1.5em);
+	\end{tikzpicture}%
+}
+
+\newcommand{\lignegg}[1]{\noindent%
+	\begin{tikzpicture}
+	
+	\fill[left color=HCBleu,right color=HCBleuclair] rectangle (\linewidth,0.07cm);
+	\node at (.5\linewidth,0.5) {\bfseries #1};
+	%\fill[cyan,path fading=west] (0,-1em) rectangle (\linewidth,-1.5em);
+	\end{tikzpicture}%
+}
+
+\renewcommand\familydefault{\sfdefault}  %police sans serif
+
+\usepackage{setspace} % pour gérer l'interlogne (je crois)
+
+
+%%%%MARGE%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setmarginsrb{2.5 cm}{1cm}{2.5 cm}{1.5 cm}{0.3 cm}{0.2 cm}{0 cm}{0 cm}
+%1 est la marge gauche
+%2 est la marge en haut
+%3 est la marge droite
+%4 est la marge en bas
+%5 fixe la hauteur de l?entête
+%6 fixe la distance entre l?entête et le texte
+%7 fixe la hauteur du pied de page
+%8 fixe la distance entre le texte et le pied de page
+\pagestyle{fancy}
+
+%%%%En-tête et pied de page POUR LA VERSION A IMPRIMER  %%%%%%%%%%%%%%%%%%%%%%%
+
+\renewcommand\headrule{\ligneg{}}
+\fancyhead[R]{}
+\fancyhead[L]{}
+%\fancyhead[RE]{\nouppercase{\textbf{\leftmark}}}
+%\fancyhead[RO]{\textbf{\thepage}} 
+
+
+%\renewcommand\footrulewidth{1pt}
+
+\fancyfoot[C]{}
+%\fancyfoot[R]{Session 2020}
+%\fancyfoot[L]{Agrégation SII - Option IM}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%En-tête et pied de page POUR LA VERSION NUMERIQUE  %%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%A FAIRE, 
+%%attention, j'ai mis le paramètre twoside dans le document class
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%DOCUMENT%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand\vect[1]{\overrightarrow{#1}}
+
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+\setlength\abovecaptionskip{0.2cm} %espace entre légende et figure
+\setlength\belowcaptionskip{-0.2cm} %espace entre légende et paragraphe
+
+
+\titlespacing*{\section}
+{0pt}{4ex}{1.8ex}
+\titlespacing*{\subsection}
+{0pt}{2.1ex}{1.8ex}
+\titlespacing*{\subsubsection}
+{0pt}{1.8ex}{1.6ex}
+\titlespacing*{\paragraph}
+{0pt}{1.8ex}{1.8ex}
+
+
+
+\usepackage{afterpage} %Pour le compteur de page
+\newcommand\myemptypage{
+	\newpage
+	\null
+	\thispagestyle{empty}
+	\addtocounter{page}{-1}
+	\newpage	
+}
+
+
+
+\begin{document}
+\begin{center}	
+	\vspace*{-0.3cm}
+	{\Large \textbf{Deep learning for the control of hand prostheses from electromiographic signals \\}}
+	\vspace{0.5cm}
+	{\large Project proposal \\}
+	\vspace{0.3cm}
+	{\large\textbf{Antoine Benady - Raphael Reme} \\}
+	\vspace{0.3cm}
+	%{29 octobre 2020\\}
+	%\vspace{2cm}
+	\lignegg{}
+	
+\end{center}
+
+\section*{Motivation and project definition}
+
+
+
+
+\section*{Evaluation}
+
+
+
+\section*{Vieux trucs déjà tapés, en français}
+
+\section*{Contexte}
+La conception de prothèse active, ergonomique et économique, en remplacement de mains humaines, reste actuellement un challenge important en raison de la compléxité des mouvements réalisables par une main et la commandabilité de ces prothèses à partir des souhaits de l'utilisateur.
+
+La récupération des signaux électromiographiques (EMG) semble être une solution intéressante pour déterminer l'intention de l'utilisateur. Ces dernières années avec l'émergence de techniques d'apprentissages, des propositions de pilotage des prothèses avec des traitements des signaux EMG par réseaux de neurones ont vu le jour.\cite{principe}
+
+\begin{figure}[!htbp] 
+	\centering
+	\includegraphics[width=14cm]{plan}
+	\caption{Contrôle de prothèse à partir de signaux electromiographiques. (Crédit \cite{principe})}
+\end{figure}
+
+\section*{Idée du projet}
+
+L'idée du projet serait d'entrainer un réseau de neurones pour prédire les mouvements souhaités de l'utilisateur à partir des signaux électromiographiques. Il existe des bases de données obtenues à partir de patients sains. \cite{database}
+
+Je n'ai aucune expérience en Deep Learning pour l'instant car je viens d'une formation mécatronique (donc pas du tout math/info), mais par contre j'ai un peu le sens physique du problème.
+
+\bibliographystyle{plain}
+\bibliography{biblio}
+
+
+
+
+
+
+
+\end{document}
