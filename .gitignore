@@ -24,3 +24,6 @@ experiments/
 *.synctex.gz
 *.out
 *.pyg
+*.bbl
+*.blg
+
