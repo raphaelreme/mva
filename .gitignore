@@ -15,6 +15,7 @@ build/
 
 # Experiments (model weights/results)
 experiments/
+*.pth
 
 # Latex
 *.aux
