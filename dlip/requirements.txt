@@ -1,3 +1,4 @@
+deep-trainer
 matplotlib
 numpy
 opencv-python
