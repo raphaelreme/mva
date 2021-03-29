@@ -1,10 +1,14 @@
+contextily
 dtw-python
+geopandas
 ipython
 loadmydata
 matplotlib
 numpy
 pandas
+ruptures
 scikit-learn
 scipy
+seaborn
 sporco
 statsmodels
