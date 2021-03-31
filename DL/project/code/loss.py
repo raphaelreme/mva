@@ -2,6 +2,7 @@ import torch
 from torch import nn
 
 
+# FIXME: Should probably inherit from nn.Module or nn.MSELoss
 class Loss:
     """Base class for handcrafted losses
 
@@ -10,7 +11,7 @@ class Loss:
     """
     base = nn.MSELoss(reduction="none")
 
-    def __call__(self, prediction: torch.TensorType, target: torch.TensorType) -> torch.TensorType:
+    def __call__(self, prediction: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
         """Compute the loss between the target and the prediction.
 
         Args:
@@ -26,7 +27,6 @@ class Loss:
 class LastLoss(Loss):
     """Sequence loss. Keep only the last moments of a sequence
 
-
     Make the assumption that the beginning is quite hard to predict
     and track only final errors.
     """
@@ -35,7 +35,7 @@ class LastLoss(Loss):
         self.last = last
         self.reduction = reduction
 
-    def __call__(self, prediction: torch.TensorType, target: torch.TensorType) -> torch.TensorType:
+    def __call__(self, prediction: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
         unreduced = self.base(prediction[..., -self.last,:], target[..., -self.last,:])
 
         if self.reduction == "mean":
@@ -59,7 +59,7 @@ class DecayLoss(Loss):
         self.decay_power = decay_power
         self.reduction = reduction
 
-    def __call__(self, prediction: torch.TensorType, target: torch.TensorType) -> torch.TensorType:
+    def __call__(self, prediction: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
         seq_len = target.shape[-2]   # target.shape = (..., seq_len, out_size)
         decay = torch.arange(seq_len, device=target.device)**self.decay_power
         decay = seq_len * decay / decay.sum()  # Renormalize this loss
@@ -73,6 +73,7 @@ class DecayLoss(Loss):
         if self.reduction == "none":
             return unreduced
         raise ValueError(f"Unknown reduction method: {self.reduction}")
+
 
 class MovementLoss(Loss):
     """Sequence Loss that focus on movement.
@@ -88,7 +89,7 @@ class MovementLoss(Loss):
         self.movement_power = movement_power
         self.reduction = reduction
 
-    def __call__(self, prediction: torch.TensorType, target: torch.TensorType) -> torch.TensorType:
+    def __call__(self, prediction: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
         movements = torch.abs(target[..., :-1, :] - target[..., 1:, :])  # Shape: (..., seq_len - 1, out_size)
         movements = movements ** self.movement_power + self.epsilon
         movements *= 30  # Empirical normalization: mean(mvt(glove)) ~ 0.03

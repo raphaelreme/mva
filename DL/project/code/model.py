@@ -16,7 +16,7 @@ class LSTMModel(nn.Module):
         self.lstm = nn.LSTM(input_dim, hidden_dim, n_layer, batch_first=True, dropout=dropout*(n_layer > 1))
         self.fc = nn.Linear(hidden_dim, output_dim)
 
-    def forward(self, x: torch.TensorType, hidden: Tuple[torch.TensorType, torch.TensorType] = None):
+    def forward(self, x: torch.Tensor, hidden: Tuple[torch.Tensor, torch.Tensor] = None):
         """Forward pass
 
         Args:
@@ -44,7 +44,7 @@ class GRUModel(nn.Module):
         self.gru = nn.GRU(input_dim, hidden_dim, n_layer, batch_first=True, dropout=dropout*(n_layer > 1))
         self.fc = nn.Linear(hidden_dim, output_dim)
 
-    def forward(self, x: torch.TensorType, hidden: Tuple[torch.TensorType, torch.TensorType] = None):
+    def forward(self, x: torch.Tensor, hidden: Tuple[torch.Tensor, torch.Tensor] = None):
         """Forward pass
 
         Args:

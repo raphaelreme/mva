@@ -143,7 +143,7 @@ class SequenceDataset(NinaProDataset):
 
         Useful to train on some user and test over the same user.
         """
-        step = 54 * 400 // 2  # ~ 54seconds for each ex.
+        step = 54 * 400 // 2  # ~ 54seconds for each exercise.
 
         train_idx = []
         test_idx = []
